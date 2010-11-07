@@ -40,25 +40,27 @@ public class MapViewer extends MapActivity {
 	LocationListener locationListener;
 	String currentLat;
 	String currentLon;
+	MyLocationOverlay myLocationOverlay;
 	String nearestPolluter;
 	Location closestInstallation;
 	float distance = 42000000;
-	MediaPlayer mp;
-	MyLocationOverlay myLocationOverlay;
+	MediaPlayer mp = MediaPlayer.create(this, R.raw.geigerclick);
     
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-    	mp = MediaPlayer.create(this, R.raw.geigerclick);
-
-        setContentView(R.layout.main);
-    	mapView = (MapView) findViewById(R.id.mapview);
-		mapView.setBuiltInZoomControls(true);
-        
+    	initMap();        
     	startGettingLocation();		
-        
+    }
+    
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        initMap();		
+    	startGettingLocation();		
     }
     
     /** Called when the activity is first returned to front. */
@@ -66,15 +68,17 @@ public class MapViewer extends MapActivity {
     public void onRestart()
     {
         super.onRestart();
-
-        setContentView(R.layout.main);
-    	mapView = (MapView) findViewById(R.id.mapview);
-		mapView.setBuiltInZoomControls(true);
-		
+        initMap();		
     	startGettingLocation();		
-        
     }
     	
+    /** Called when the activity is stopped. */
+    @Override
+    protected void onPause() {
+        super.onPause();
+    	stopGettingLocation();
+    }
+    
     /** Called when the activity is stopped. */
     @Override
     protected void onStop() {
@@ -89,16 +93,20 @@ public class MapViewer extends MapActivity {
     	stopGettingLocation();
     }
     
+    public void initMap() {
+        setContentView(R.layout.main);
+    	mapView = (MapView) findViewById(R.id.mapview);
+    	mapController = mapView.getController();
+		mapController.setZoom(14);
+		mapView.setBuiltInZoomControls(true);
+    }
+    
     public void startGettingLocation(){
 		myLocationOverlay = new MyLocationOverlay(this, mapView);
-        mapView.getOverlays().add(myLocationOverlay);
         myLocationOverlay.enableCompass();
-//        myLocationOverlay.enableMyLocation();
-//        myLocationOverlay.runOnFirstFix(new Runnable() {
-//            public void run() {
-//                mapController.animateTo(myLocationOverlay.getMyLocation());
-//            }
-//        });
+        myLocationOverlay.enableMyLocation();
+        mapView.getOverlays().add(myLocationOverlay);
+        
 //        myLocationOverlay.onSensorChanged(Sensor.TYPE_ORIENTATION, values)
         
 //    	SensorManager sm = (SensorManager) this.getSystemService(SENSOR_SERVICE);
@@ -121,7 +129,9 @@ public class MapViewer extends MapActivity {
         locationManager	= (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
-            	
+
+                mapController.animateTo(myLocationOverlay.getMyLocation());
+                
         		Log.d("carbongeiger","my orientation: " + myLocationOverlay.getOrientation());
         		
             	if (currentLocation == null || location.distanceTo(currentLocation) > 100) {
@@ -153,27 +163,27 @@ public class MapViewer extends MapActivity {
     
     public void stopGettingLocation(){
 		myLocationOverlay = new MyLocationOverlay(this, mapView);
-        mapView.getOverlays().add(myLocationOverlay);
         myLocationOverlay.disableCompass();
+        myLocationOverlay.disableMyLocation();
         locationManager	= (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
     	locationManager.removeUpdates(locationListener);
     }
     
     public void getMarkersForLocation() {
 //		set current location
-    	mapController = mapView.getController();
-		mapController.setZoom(14);
-		GeoPoint current_position = new GeoPoint((int) (currentLocation.getLatitude() * 1E6), (int) (currentLocation.getLongitude() * 1E6));
-		mapController.animateTo(current_position);
-		Drawable sallyicon = this.getResources().getDrawable(R.drawable.sally);
-		InstallationMarkers current_position_marker = new InstallationMarkers(sallyicon);
+//    	mapController = mapView.getController();
+//		mapController.setZoom(14);
+//		GeoPoint current_position = new GeoPoint((int) (currentLocation.getLatitude() * 1E6), (int) (currentLocation.getLongitude() * 1E6));
+//		mapController.animateTo(current_position);
+//		Drawable sallyicon = this.getResources().getDrawable(R.drawable.sally);
+//		InstallationMarkers current_position_marker = new InstallationMarkers(sallyicon);
 		
 		List<Overlay> mapOverlays = mapView.getOverlays();
 		
 //		add the current position marker
-		OverlayItem current_position_overlay = new OverlayItem(current_position, "Current position", "I'm here!");
-		current_position_marker.addOverlay(current_position_overlay);
-		mapOverlays.add(current_position_marker);
+//		OverlayItem current_position_overlay = new OverlayItem(current_position, "Current position", "I'm here!");
+//		current_position_marker.addOverlay(current_position_overlay);
+//		mapOverlays.add(current_position_marker);
 
 		String urltocall = "http://www.sandbag.org.uk/maps/installations_geiger/" + currentLat + '_' + currentLon + ".json";
 		Log.d("carbongeiger: ", "Calling URL " + urltocall);
