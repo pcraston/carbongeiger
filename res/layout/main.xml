@@ -15,7 +15,7 @@
 	    <TextView
 		android:id="@+id/polluterdistance"
 		android:text="Acquiring location..."
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_width="fill_parent"
          android:layout_height="wrap_content"
          android:drawSelectorOnTop="true"
