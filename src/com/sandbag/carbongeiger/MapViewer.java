@@ -202,7 +202,8 @@ public class MapViewer extends MapActivity {
 	 			}
 	 			
 	 			GeoPoint point = new GeoPoint((int) (current.lat * 1E6), (int) (current.lon * 1E6));
-		        OverlayItem overlayitem = new OverlayItem(point, current.name, "Look at my carbon!");
+	 			String snippet = "Emissions 2009: " + current.emissions2009 + "\n" + "Allocations 2009: " + current.alloc2009 + "\nTonnes of C02";
+		        OverlayItem overlayitem = new OverlayItem(point, current.company + ": " + current.name, snippet);
 				
 				Drawable markericon = getMarkerIcon(current.power, current.overalloc);
 		        installation_marker = new InstallationMarkers(markericon, this);
@@ -247,6 +248,9 @@ public class MapViewer extends MapActivity {
 
 class installations {
 	public String name;
+	public String company;
+	public int emissions2009;
+	public int alloc2009;
 	public int id;
     public double lat;
     public double lon;
