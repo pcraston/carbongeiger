@@ -6,16 +6,10 @@ import java.util.Map;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.hardware.GeomagneticField;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
-import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.MediaPlayer;
+//import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -44,7 +38,7 @@ public class MapViewer extends MapActivity {
 	String nearestPolluter;
 	Location closestInstallation;
 	float distance = 42000000;
-	MediaPlayer mp = MediaPlayer.create(this, R.raw.geigerclick);
+//	MediaPlayer mp = MediaPlayer.create(this, R.raw.geigerclick);
     
     /** Called when the activity is first created. */
     @Override
@@ -55,20 +49,11 @@ public class MapViewer extends MapActivity {
     	startGettingLocation();		
     }
     
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        initMap();		
-    	startGettingLocation();		
-    }
-    
     /** Called when the activity is first returned to front. */
     @Override
     public void onRestart()
     {
         super.onRestart();
-        initMap();		
     	startGettingLocation();		
     }
     	
@@ -130,11 +115,11 @@ public class MapViewer extends MapActivity {
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
 
-                mapController.animateTo(myLocationOverlay.getMyLocation());
                 
         		Log.d("carbongeiger","my orientation: " + myLocationOverlay.getOrientation());
         		
             	if (currentLocation == null || location.distanceTo(currentLocation) > 100) {
+                    mapController.animateTo(myLocationOverlay.getMyLocation());
 	            	currentLocation = location;
 	            	currentLat = Double.toString(location.getLatitude());
 	            	currentLon = Double.toString(location.getLongitude());
@@ -143,7 +128,7 @@ public class MapViewer extends MapActivity {
             	if (currentLocation != null && closestInstallation != null) {
             		float bearing = currentLocation.bearingTo(closestInstallation);
             		if (bearing < 10 && bearing > 350) {
-            			mp.start();
+//            			mp.start();
             		}
             	}
             }
@@ -220,7 +205,7 @@ public class MapViewer extends MapActivity {
 		        OverlayItem overlayitem = new OverlayItem(point, current.name, "Look at my carbon!");
 				
 				Drawable markericon = getMarkerIcon(current.power, current.overalloc);
-		        installation_marker = new InstallationMarkers(markericon);
+		        installation_marker = new InstallationMarkers(markericon, this);
 		        
 		        installation_marker.addOverlay(overlayitem);
 		        
