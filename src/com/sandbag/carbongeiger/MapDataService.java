@@ -62,7 +62,7 @@ public class MapDataService{
     			jsonObject.put(param.getKey(), param.getValue());
 			}
     		catch (JSONException e) {
-    			Log.e("Groshie", "JSONException : "+e);
+//    			Log.e("Groshie", "JSONException : "+e);
 			}
     	}
         return webInvoke(methodName,  jsonObject.toString(), "application/json");
@@ -91,12 +91,12 @@ public class MapDataService{
         try {
             tmp = new StringEntity(data,"UTF-8");
         } catch (UnsupportedEncodingException e) {
-            Log.e("Groshie", "HttpUtils : UnsupportedEncodingException : "+e);
+//            Log.e("Groshie", "HttpUtils : UnsupportedEncodingException : "+e);
         }
 
         httpPost.setEntity(tmp);
 
-        Log.d("Groshie", webServiceUrl + "?" + data);
+//        Log.d("Groshie", webServiceUrl + "?" + data);
 
         try {
             response = httpClient.execute(httpPost,localContext);
@@ -105,7 +105,7 @@ public class MapDataService{
                 ret = EntityUtils.toString(response.getEntity());
             }
         } catch (Exception e) {
-            Log.e("Groshie", "HttpUtils: " + e);
+//            Log.e("Groshie", "HttpUtils: " + e);
         }
 
         return ret;
@@ -136,14 +136,14 @@ public class MapDataService{
     	}
 
         httpGet = new HttpGet(getUrl);
-        Log.e("WebGetURL: ",getUrl);
+//        Log.e("WebGetURL: ",getUrl);
 
         try {
             response = httpClient.execute(httpGet);
             ret = EntityUtils.toString(response.getEntity());
             return ret;
         } catch (Exception e) {
-            Log.e("Groshie:", e.getMessage());
+//            Log.e("Groshie:", e.getMessage());
             throw e;
         }
     }
@@ -193,11 +193,11 @@ public class MapDataService{
     public void abort() {
         try {
             if (httpClient != null) {
-                System.out.println("Abort.");
+//                System.out.println("Abort.");
                 httpPost.abort();
             }
         } catch (Exception e) {
-            System.out.println("carbongeiger" + e);
+//            System.out.println("carbongeiger" + e);
         }
     }
 }

@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 //import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,14 +38,16 @@ public class MapViewer extends MapActivity {
 	MyLocationOverlay myLocationOverlay;
 	String nearestPolluter;
 	Location closestInstallation;
+	float orientation = -1;
 	float distance = 42000000;
-//	MediaPlayer mp = MediaPlayer.create(this, R.raw.geigerclick);
+	MediaPlayer mp;
     
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+		mp = MediaPlayer.create(this, R.raw.geigerclick);
     	initMap();        
     	startGettingLocation();		
     }
@@ -84,10 +87,10 @@ public class MapViewer extends MapActivity {
     	mapController = mapView.getController();
 		mapController.setZoom(14);
 		mapView.setBuiltInZoomControls(true);
+		myLocationOverlay = new MyLocationOverlay(this, mapView);
     }
     
     public void startGettingLocation(){
-		myLocationOverlay = new MyLocationOverlay(this, mapView);
         myLocationOverlay.enableCompass();
         myLocationOverlay.enableMyLocation();
         mapView.getOverlays().add(myLocationOverlay);
@@ -116,7 +119,20 @@ public class MapViewer extends MapActivity {
             public void onLocationChanged(Location location) {
 
                 
-        		Log.d("carbongeiger","my orientation: " + myLocationOverlay.getOrientation());
+        		Log.d("carbongeiger","my orientation relative to north: " + myLocationOverlay.getOrientation());
+
+        		if (closestInstallation != null) {
+//        			what is the below giving me exactly? how calculate whether pointing towards?
+        			orientation = closestInstallation.bearingTo(currentLocation);
+        		
+	    			Log.d("carbongeiger","orientation to nearest polluter: " + orientation);
+	        		if ((orientation > 0 && orientation < 30) || (orientation > 330 && orientation < 360)) {
+	        			Log.d("carbongeiger","BEEP!");
+//	        			mp.start();
+	        		}
+        		} else {
+        			Log.d("carbongeiger","no orientation to nearest polluter!");
+        		}
         		
             	if (currentLocation == null || location.distanceTo(currentLocation) > 100) {
                     mapController.animateTo(myLocationOverlay.getMyLocation());
@@ -125,12 +141,12 @@ public class MapViewer extends MapActivity {
 	            	currentLon = Double.toString(location.getLongitude());
 	            	getMarkersForLocation();
             	}
-            	if (currentLocation != null && closestInstallation != null) {
-            		float bearing = currentLocation.bearingTo(closestInstallation);
-            		if (bearing < 10 && bearing > 350) {
-//            			mp.start();
-            		}
-            	}
+//            	if (currentLocation != null && closestInstallation != null) {
+//            		float bearing = currentLocation.bearingTo(closestInstallation);
+//            		if (bearing < 10 && bearing > 350) {
+////            			mp.start();
+//            		}
+//            	}
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -147,28 +163,14 @@ public class MapViewer extends MapActivity {
     }
     
     public void stopGettingLocation(){
-		myLocationOverlay = new MyLocationOverlay(this, mapView);
-        myLocationOverlay.disableCompass();
+//        myLocationOverlay.disableCompass();
         myLocationOverlay.disableMyLocation();
         locationManager	= (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
     	locationManager.removeUpdates(locationListener);
     }
     
     public void getMarkersForLocation() {
-//		set current location
-//    	mapController = mapView.getController();
-//		mapController.setZoom(14);
-//		GeoPoint current_position = new GeoPoint((int) (currentLocation.getLatitude() * 1E6), (int) (currentLocation.getLongitude() * 1E6));
-//		mapController.animateTo(current_position);
-//		Drawable sallyicon = this.getResources().getDrawable(R.drawable.sally);
-//		InstallationMarkers current_position_marker = new InstallationMarkers(sallyicon);
-		
 		List<Overlay> mapOverlays = mapView.getOverlays();
-		
-//		add the current position marker
-//		OverlayItem current_position_overlay = new OverlayItem(current_position, "Current position", "I'm here!");
-//		current_position_marker.addOverlay(current_position_overlay);
-//		mapOverlays.add(current_position_marker);
 
 		String urltocall = "http://www.sandbag.org.uk/maps/installations_geiger/" + currentLat + '_' + currentLon + ".json";
 		Log.d("carbongeiger: ", "Calling URL " + urltocall);
@@ -196,9 +198,9 @@ public class MapViewer extends MapActivity {
 	 				nearestPolluter = current.name;
 	 		 		closestInstallation.setLatitude(current.lat);
 	 		 		closestInstallation.setLongitude(current.lon);
-	 				Log.d("carbongeiger: ", "Current position: lat " + currentLat + " lon " + currentLon);
-	 				Log.d("carbongeiger: ", nearestPolluter + " position: lat " + Double.toString(current.lat) + " lon " + Double.toString(current.lon));
-	 				Log.d("carbongeiger: ", nearestPolluter + " distance: " + Double.toString(Math.floor(distance)));
+//	 				Log.d("carbongeiger: ", "Current position: lat " + currentLat + " lon " + currentLon);
+//	 				Log.d("carbongeiger: ", nearestPolluter + " position: lat " + Double.toString(current.lat) + " lon " + Double.toString(current.lon));
+//	 				Log.d("carbongeiger: ", nearestPolluter + " distance: " + Double.toString(Math.floor(distance)));
 	 			}
 	 			
 	 			GeoPoint point = new GeoPoint((int) (current.lat * 1E6), (int) (current.lon * 1E6));
@@ -218,7 +220,7 @@ public class MapViewer extends MapActivity {
 	 	}
 	 	catch(Exception e)
 	 	{
-	 		Log.d("carbongeiger Error: ", e.getMessage());
+//	 		Log.d("carbongeiger Error: ", e.getMessage());
 	 	}
     }
     
