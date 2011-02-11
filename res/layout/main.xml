@@ -13,17 +13,44 @@
 	    />
 	    
 	    <TextView
-		android:id="@+id/polluterdistance"
-		android:text="Acquiring location..."
-        android:layout_alignParentTop="true"
-        android:layout_width="fill_parent"
+		 android:id="@+id/polluterdistance"
+		 android:text="Acquiring location..."
+         android:layout_alignParentTop="true"
+         android:layout_width="fill_parent"
          android:layout_height="wrap_content"
          android:drawSelectorOnTop="true"
          android:textSize="10dip"
-         android:paddingTop="10dip"
-         android:paddingBottom="10dip"
+         android:paddingTop="5dip"
+         android:paddingBottom="5dip"
          android:background="#FFFFFF"
+         android:textColor="#000"
+         android:textStyle="bold"
 		/>
+		
+		<TextView
+		 android:id="@+id/orientation"
+		 android:text="Calculating orientation..."
+         android:layout_alignParentBottom="true"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:drawSelectorOnTop="true"
+         android:textSize="10dip"
+         android:paddingTop="5dip"
+         android:paddingBottom="5dip"
+         android:background="#FFFFFF"
+         android:textColor="#000"
+		/>
+		
+		<CheckBox android:id="@+id/chksound"
+        	android:layout_below="@+id/polluterdistance"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+            android:text="Sound?"
+         	android:drawSelectorOnTop="true"
+         	android:textColor="#000"
+         	android:textSize="12dip"
+         	android:textStyle="bold"
+            />  
 	
 
 </RelativeLayout>

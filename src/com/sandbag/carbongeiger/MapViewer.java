@@ -16,7 +16,12 @@ import android.location.LocationManager;
 import android.media.MediaPlayer;
 //import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
@@ -48,7 +53,10 @@ public class MapViewer extends MapActivity {
 	float difference = 0;
 	float distance;
 	MediaPlayer mp;
-    
+	Vibrator vibes;
+	CheckBox soundButton;
+	boolean sound = true;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -59,6 +67,11 @@ public class MapViewer extends MapActivity {
 //    	startGettingLocation();
     	mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+        vibes = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+        
+        soundButton = (CheckBox)findViewById(R.id.chksound);
+        soundButton.setOnClickListener(soundButtonListener);
+    	soundButton.setChecked(true);
     }
     
     /** Called when the activity is first returned to front. */
@@ -101,34 +114,43 @@ public class MapViewer extends MapActivity {
 		myLocationOverlay = new MyLocationOverlay(this, mapView);
     }
     
+    private OnClickListener soundButtonListener = new OnClickListener() {
+        public void onClick(View v) {
+        	if (soundButton.isChecked()) {
+            	sound = true;
+            	soundButton.setChecked(true);
+        	} else {
+        		sound = false;
+        		soundButton.setChecked(false);
+        	}
+        }
+    };
+    
     private final SensorEventListener mListener = new SensorEventListener() {
         public void onSensorChanged(SensorEvent event) {
-        	Log.d("carbongeiger","sensorChanged (new Azimuth " + event.values[0] + " east of magnetic north)");
+//        	Log.d("carbongeiger","sensorChanged (new Azimuth " + event.values[0] + " east of magnetic north)");
         	
 	    	if (closestInstallation != null) {
 				orientation = closestInstallation.bearingTo(currentLocation);
-//				this seems to be right, need to figure out why bearing seems to be counter-clockwise east of north
-				orientation = 360-orientation;
+//				this seems to be right, need to figure out why bearing seems to be counter-clockwise east of north - antipodal bearing error?
+//				orientation = 360-orientation;
 //				Log.d("carbongeiger","Nearest polluter location: " + closestInstallation.toString());
-				Log.d("carbongeiger","orientation to nearest polluter: " + orientation);
+//				Log.d("carbongeiger","orientation to nearest polluter: " + orientation);
 				difference = orientation - event.values[0];
 				difference = Math.abs(difference);
-				Log.d("carbongeiger","Difference between this and phone orientation: " + difference);
+//				Log.d("carbongeiger","Difference between this and phone orientation: " + difference);
+				((TextView) findViewById(R.id.orientation)).setText("Orientation. Phone: " + Math.round(event.values[0]) + ", Me->Polluter: " + Math.round(orientation) + ", Phone->Polluter: " + Math.round(difference));
 	    		if (difference < 40) {
-	    			Log.d("carbongeiger","BEEP!");
-	    			mp.start();
+					((TextView) findViewById(R.id.orientation)).setText("Geiger says BEEP!");
+//	    			Log.d("carbongeiger","Geiger says BEEP!");
+	    			vibes.vibrate(25);
+	    			if (sound == true) {
+	    				mp.start();
+	    			}
 	    		}
 			} else {
-				Log.d("carbongeiger","no orientation to nearest polluter!");
+//				Log.d("carbongeiger","no orientation to nearest polluter!");
 			}
-	
-//	    	if (currentLocation != null && closestInstallation != null) {
-//	    		float bearing = currentLocation.bearingTo(closestInstallation);
-//	    		if (bearing < 10 && bearing > 350) {
-//	    			Log.d("carbongeiger","BEEP!");
-//	//    			mp.start();
-//	    		}
-//	    	}
         }
 
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -136,29 +158,7 @@ public class MapViewer extends MapActivity {
     };
 
     
-//    public void startGettingOrientation() {
-//    	sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-    	
-
-//        myLocationOverlay.onSensorChanged(Sensor.TYPE_ORIENTATION, values)
-    		
-//        		Log.d("carbongeiger","myLocationOverlay: my orientation relative to north: " + myLocationOverlay.getOrientation());
-//        		Log.d("carbongeiger","location: my orientation relative to north: " + location.getBearing());
-//
-
-//    	  
-//    		public void onAccuracyChanged(int something, int accuracy) {
-//    		}
-//    	};
-//      sm.registerListener(sl, sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),sm.SENSOR_DELAY_GAME);    
-//    }
-    
-//    public void stopGettingOrientation() {	
-////    	sensorManager.unregisterListener(sensorEventListener);
-//    }
-    
     public void startGettingLocation(){
-//        myLocationOverlay.enableCompass();
         myLocationOverlay.enableMyLocation();
         mapView.getOverlays().add(myLocationOverlay);
         
@@ -200,7 +200,6 @@ public class MapViewer extends MapActivity {
     }
     
     public void stopGettingLocation(){
-//        myLocationOverlay.disableCompass();
         myLocationOverlay.disableMyLocation();
         locationManager	= (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
     	locationManager.removeUpdates(locationListener);
@@ -253,7 +252,7 @@ public class MapViewer extends MapActivity {
 		        mapOverlays.add(installation_marker);
 	 		}
 	 		
-			((TextView) findViewById(R.id.polluterdistance)).setText("Nearest Polluter: " + nearestPolluter + " is " + Double.toString(Math.floor(distance)) + "m away!");
+			((TextView) findViewById(R.id.polluterdistance)).setText("Nearest Polluter: " + nearestPolluter + " is " + Math.round(distance) + "m away!");
 	 	
 	 	}
 	 	catch(Exception e)
