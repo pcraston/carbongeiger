@@ -6,6 +6,7 @@ import java.util.Map;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -51,7 +52,7 @@ public class MapViewer extends MapActivity {
 	Location closestInstallation;
 	float orientation = 0;
 	float difference = 0;
-	float distance;
+	float distance = 42000000;
 	MediaPlayer mp;
 	Vibrator vibes;
 	CheckBox soundButton;
@@ -131,17 +132,26 @@ public class MapViewer extends MapActivity {
 //        	Log.d("carbongeiger","sensorChanged (new Azimuth " + event.values[0] + " east of magnetic north)");
         	
 	    	if (closestInstallation != null) {
+//	    		this gets the orientation between current location and the closest installations in east of true north
 				orientation = closestInstallation.bearingTo(currentLocation);
-//				this seems to be right, need to figure out why bearing seems to be counter-clockwise east of north - antipodal bearing error?
-//				orientation = 360-orientation;
+//				convert from -180 to 180 scale to 0 to 360 scale
+				orientation = Math.round(-orientation / 360 + 180);
 //				Log.d("carbongeiger","Nearest polluter location: " + closestInstallation.toString());
 //				Log.d("carbongeiger","orientation to nearest polluter: " + orientation);
-				difference = orientation - event.values[0];
+//				need to get declination (difference true north to magnetic north at current location) and add to orientation of phone
+				GeomagneticField geoField = new GeomagneticField(
+				         Double.valueOf(currentLocation.getLatitude()).floatValue(),
+				         Double.valueOf(currentLocation.getLongitude()).floatValue(),
+				         Double.valueOf(currentLocation.getAltitude()).floatValue(),
+				         System.currentTimeMillis()
+				      );
+				float declination = geoField.getDeclination();
+				difference = orientation - (event.values[0] + declination);
 				difference = Math.abs(difference);
 //				Log.d("carbongeiger","Difference between this and phone orientation: " + difference);
-				((TextView) findViewById(R.id.orientation)).setText("Orientation. Phone: " + Math.round(event.values[0]) + ", Me->Polluter: " + Math.round(orientation) + ", Phone->Polluter: " + Math.round(difference));
-	    		if (difference < 40) {
-					((TextView) findViewById(R.id.orientation)).setText("Geiger says BEEP!");
+				((TextView) findViewById(R.id.orientation)).setText("Orientation. Phone: " + Math.round(event.values[0] + declination) + ", Me->Polluter: " + Math.round(orientation) + ", Phone->Polluter: " + Math.round(difference));
+	    		if (difference < 40 && distance < 5000) {
+//					((TextView) findViewById(R.id.orientation)).setText("Now pointing at nearest polluter");
 //	    			Log.d("carbongeiger","Geiger says BEEP!");
 	    			vibes.vibrate(25);
 	    			if (sound == true) {
@@ -221,36 +231,39 @@ public class MapViewer extends MapActivity {
 	 		//Parse Response into our object
 	 		List<installations> insts = new Gson().fromJson(response, new TypeToken<List<installations>>(){}.getType());
 			InstallationMarkers installation_marker;
-
+			int nearestPolluterId = 0;
 	 		closestInstallation = new Location(LocationManager.GPS_PROVIDER);
 	 		for(installations current : insts){
 	 			
 	 			float [] temp = new float [10];
-	 			
-	 			Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), current.lat, current.lon, temp);
-	 			
-	 			
+	 			Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), current.lat, current.lon, temp); 			
 	 			if(temp[0]<distance){
 	 				distance = temp[0];
 	 				nearestPolluter = current.name;
+	 				nearestPolluterId = current.id;
 	 		 		closestInstallation.setLatitude(current.lat);
 	 		 		closestInstallation.setLongitude(current.lon);
 //	 				Log.d("carbongeiger", "Current position: lat " + currentLat + " lon " + currentLon);
 //	 				Log.d("carbongeiger", nearestPolluter + " position: lat " + Double.toString(current.lat) + " lon " + Double.toString(current.lon));
 //	 				Log.d("carbongeiger", nearestPolluter + " distance: " + Double.toString(Math.floor(distance)));
 	 			}
-	 			
+	 		}
+	 		
+	 		for(installations current : insts){
 	 			GeoPoint point = new GeoPoint((int) (current.lat * 1E6), (int) (current.lon * 1E6));
 	 			String snippet = "Emissions 2009: " + current.emissions2009 + "\n" + "Allocations 2009: " + current.alloc2009 + "\nTonnes of C02";
 		        OverlayItem overlayitem = new OverlayItem(point, current.company + ": " + current.name, snippet);
-				
-				Drawable markericon = getMarkerIcon(current.power, current.overalloc);
+		        Drawable markericon;
+		        if (nearestPolluterId > 0 && current.id == nearestPolluterId) {
+		        	markericon = getMarkerIcon(current.power, current.overalloc, true);
+		        } else {
+		        	markericon = getMarkerIcon(current.power, current.overalloc, false);
+		        }
 		        installation_marker = new InstallationMarkers(markericon, this);
-		        
 		        installation_marker.addOverlay(overlayitem);
-		        
 		        mapOverlays.add(installation_marker);
 	 		}
+	        
 	 		
 			((TextView) findViewById(R.id.polluterdistance)).setText("Nearest Polluter: " + nearestPolluter + " is " + Math.round(distance) + "m away!");
 	 	
@@ -261,18 +274,34 @@ public class MapViewer extends MapActivity {
 	 	}
     }
     
-    public Drawable getMarkerIcon(boolean power, boolean overalloc) {
+    public Drawable getMarkerIcon(boolean power, boolean overalloc, boolean nearest) {
     	if (power) {
     		if (overalloc) {
-    	    	return this.getResources().getDrawable(R.drawable.icon_plant_red);    			
+    			if (nearest) {
+    				return this.getResources().getDrawable(R.drawable.icon_plant_red_closest);    				
+    			} else {
+    				return this.getResources().getDrawable(R.drawable.icon_plant_red);    
+    			}
     		} else {
-    	    	return this.getResources().getDrawable(R.drawable.icon_plant_green);  
+    			if (nearest) {
+    				return this.getResources().getDrawable(R.drawable.icon_plant_green_closest);      				
+    			} else {
+    				return this.getResources().getDrawable(R.drawable.icon_plant_green);  
+    			}
     		}
     	} else {
     		if (overalloc) {
-    	    	return this.getResources().getDrawable(R.drawable.icon_factory_red); 
+    			if (nearest) {
+        	    	return this.getResources().getDrawable(R.drawable.icon_factory_red_closest);
+    			} else {
+    				return this.getResources().getDrawable(R.drawable.icon_factory_red); 
+    			}
     		} else {
-    	    	return this.getResources().getDrawable(R.drawable.icon_factory_green); 
+    			if (nearest) {
+        	    	return this.getResources().getDrawable(R.drawable.icon_factory_green_closest);     				
+    			} else {
+    				return this.getResources().getDrawable(R.drawable.icon_factory_green); 
+    			}
     		}
     	}
     }
