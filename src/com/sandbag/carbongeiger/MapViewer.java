@@ -176,7 +176,7 @@ public class MapViewer extends MapActivity {
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
         		
-            	if (currentLocation == null || location.distanceTo(currentLocation) > 40000) {
+            	if (currentLocation == null || location.distanceTo(currentLocation) > 1000) {
             		if (currentLocation == null) {
 //            			Log.d("carbongeiger","No currentLocation. Polling for first time...");
             		} else if (closestInstallation == null ) {
