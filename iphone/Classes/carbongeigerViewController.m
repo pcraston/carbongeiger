@@ -3,15 +3,16 @@
 //  iGeiger
 //
 //  Created by Patrick Craston on 20/11/2010.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
 #import "carbongeigerViewController.h"
 #import "JSON.h"
+#import "InstallationAnnotation.h">
 
 @implementation carbongeigerViewController
 
-@synthesize mapView;
+@synthesize mapView, locationManager, mapAnnotations;
 
 /*
 // The designated initializer. Override to perform setup that is required before the view is loaded.
@@ -30,38 +31,15 @@
 }
 */
 
-
-
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+	self.locationManager = [[CLLocationManager alloc] init]; 
+	locationManager.delegate = self; 
+	locationManager.desiredAccuracy = kCLLocationAccuracyBest; 
+	[locationManager startUpdatingLocation];
 	mapView.showsUserLocation=YES;
-	responseData = [[NSMutableData data] retain];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.sandbag.org.uk/maps/installations_geiger/51.51015_-0.18692.json"]];
-	[[NSURLConnection alloc] initWithRequest:request delegate:self];
 	
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	[responseData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-	[responseData appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-	//locationLabel.text = [NSString stringWithFormat:@"Connection failed: %@", [error description]];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	[connection release];
-	NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-	[responseData release];
-	NSDictionary *dictionary = [responseString JSONValue];
-
-	NSLog(@"Installation: %@", [dictionary objectAtIndex:0]);
-//	locationLabel.text =  @"Installation: %@", [dictionary objectAtIndex:0];
 }
 
 
@@ -82,12 +60,56 @@
 - (void)viewDidUnload {
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
+	self.locationManager = nil;
+    self.mapAnnotations = nil;
+    self.mapView = nil;
+	[super viewDidUnload];
 }
 
 
 - (void)dealloc {
-    [super dealloc];
+	[locationManager release];
 	[mapView release];
+    [mapAnnotations release];
+    [super dealloc];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
+	NSString *latlon = [NSString stringWithFormat: @"Current Location: %f, %f",newLocation.coordinate.latitude,newLocation.coordinate.longitude];
+	locationLabel.text = latlon;
+	responseData = [[NSMutableData data] retain];
+	NSString *urltoload = [NSString stringWithFormat: @"http://www.sandbag.org.uk/maps/installations_geiger/%f_%f.json",newLocation.coordinate.latitude,newLocation.coordinate.longitude];
+	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urltoload]];
+	[[NSURLConnection alloc] initWithRequest:request delegate:self];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+	[responseData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+	[responseData appendData:data];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+	//locationLabel.text = [NSString stringWithFormat:@"Connection failed: %@", [error description]];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+	[connection release];
+	NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+	[responseData release];
+	NSDictionary *installations = [responseString JSONValue];
+	
+	self.mapAnnotations = [[NSMutableArray alloc] initWithCapacity:[installations count]];
+	
+	for (int i = 0; i < [installations count]; i++) {
+		InstallationAnnotation *installation = [[InstallationAnnotation alloc] init];
+		[self.mapAnnotations addObject:[installations objectAtIndex:i]];
+		NSLog(@"%@",[mapAnnotations objectAtIndex:i]);
+		[installation release];
+	}
+//		[text appendFormat:@"%@\n", [installations objectAtIndex:i]];
 }
 
 @end
