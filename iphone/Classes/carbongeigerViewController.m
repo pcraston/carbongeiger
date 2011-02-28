@@ -38,7 +38,8 @@
 	locationManager.delegate = self; 
 	locationManager.desiredAccuracy = kCLLocationAccuracyBest; 
 	[locationManager startUpdatingLocation];
-	mapView.showsUserLocation=YES;
+	//currently deactivated because always on SF in simulator
+//	mapView.showsUserLocation=YES;
 	
 }
 
@@ -75,6 +76,15 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
+    //zoom to current location
+	MKCoordinateRegion zoomRegion;
+    zoomRegion.center.latitude = newLocation.coordinate.latitude;
+    zoomRegion.center.longitude = newLocation.coordinate.longitude;
+    zoomRegion.span.latitudeDelta = 2;
+    zoomRegion.span.longitudeDelta = 2;	
+    [self.mapView setRegion:zoomRegion animated:YES];
+	
+	//poll sandbag server to get json file with nearby installations
 	NSString *latlon = [NSString stringWithFormat: @"Current Location: %f, %f",newLocation.coordinate.latitude,newLocation.coordinate.longitude];
 	locationLabel.text = latlon;
 	responseData = [[NSMutableData data] retain];
