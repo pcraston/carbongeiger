@@ -15,13 +15,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
-//import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -37,26 +35,25 @@ import com.google.gson.reflect.TypeToken;
 
 public class MapViewer extends MapActivity {
 
-	MapView mapView;
-	MapController mapController;
-	GeoPoint geoPoint;
-	Location currentLocation;
-    LocationManager locationManager;
-	LocationListener locationListener;
-	SensorManager mSensorManager;
-	Sensor mSensor;
-	String currentLat;
-	String currentLon;
-	MyLocationOverlay myLocationOverlay;
-	String nearestPolluter;
-	Location closestInstallation;
-	float orientation = 0;
-	float difference = 0;
-	float distance = 42000000;
-	MediaPlayer mp;
-	Vibrator vibes;
-	CheckBox soundButton;
-	boolean sound = true;
+	private MapView mapView;
+	private MapController mapController;
+	private Location currentLocation;
+	private LocationManager locationManager;
+	private LocationListener locationListener;
+	private SensorManager mSensorManager;
+	private Sensor mSensor;
+	private String currentLat;
+	private String currentLon;
+	private MyLocationOverlay myLocationOverlay;
+	private String nearestPolluter;
+	private Location closestInstallation;
+	private float orientation = 0;
+	private float difference = 0;
+	private float distance = 42000000;
+	private MediaPlayer mp;
+	private Vibrator vibes;
+	private CheckBox soundButton;
+	private boolean sound = true;
 	
     /** Called when the activity is first created. */
     @Override
@@ -133,9 +130,11 @@ public class MapViewer extends MapActivity {
         	
 	    	if (closestInstallation != null) {
 //	    		this gets the orientation between current location and the closest installations in east of true north
-				orientation = closestInstallation.bearingTo(currentLocation);
+				orientation = currentLocation.bearingTo(closestInstallation);
 //				convert from -180 to 180 scale to 0 to 360 scale
-				orientation = Math.round(-orientation / 360 + 180);
+				if (orientation < 0) {
+					orientation = 360 + orientation;
+				}
 //				Log.d("carbongeiger","Nearest polluter location: " + closestInstallation.toString());
 //				Log.d("carbongeiger","orientation to nearest polluter: " + orientation);
 //				need to get declination (difference true north to magnetic north at current location) and add to orientation of phone
@@ -149,10 +148,9 @@ public class MapViewer extends MapActivity {
 				difference = orientation - (event.values[0] + declination);
 				difference = Math.abs(difference);
 //				Log.d("carbongeiger","Difference between this and phone orientation: " + difference);
-				((TextView) findViewById(R.id.orientation)).setText("Orientation. Phone: " + Math.round(event.values[0] + declination) + ", Me->Polluter: " + Math.round(orientation) + ", Phone->Polluter: " + Math.round(difference));
+				((TextView) findViewById(R.id.orientation)).setText("Orientation. Phone: " + Math.round(event.values[0]) + ", Me->Polluter: " + Math.round(orientation) + ", Phone->Polluter: " + Math.round(difference));
 	    		if (difference < 40 && distance < 5000) {
 //					((TextView) findViewById(R.id.orientation)).setText("Now pointing at nearest polluter");
-//	    			Log.d("carbongeiger","Geiger says BEEP!");
 	    			vibes.vibrate(25);
 	    			if (sound == true) {
 	    				mp.start();
