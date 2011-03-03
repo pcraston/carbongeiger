@@ -10,7 +10,7 @@
 
 
 @implementation InstallationAnnotation
-@synthesize coordinate, title, subtitle, overalloc, power, image;
+@synthesize coordinate, title, subtitle, overalloc, power, nearest, image;
 
 - (id) initWithDictionary:(NSDictionary *) dict
 {
@@ -19,7 +19,13 @@
 		coordinate.latitude = [[dict objectForKey:@"lat"] doubleValue];
 		coordinate.longitude = [[dict objectForKey:@"lon"] doubleValue];
 		self.title = [dict objectForKey:@"name"];
-		self.subtitle = [dict objectForKey:@"company"];	
+		NSString *company = [dict objectForKey:@"company"];
+		NSString *parent_company = [dict objectForKey:@"parent_company"];
+		if ([parent_company isEqualToString:@""] || [parent_company isEqualToString: company]) {
+			self.subtitle = [NSString stringWithFormat:@"%@",company];	
+		} else {
+			self.subtitle = [NSString stringWithFormat:@"%@, %@",company,parent_company];	
+		}
 		if ([[dict objectForKey:@"overalloc"] doubleValue] == 1) {
 			self.overalloc = YES;
 		} else {
@@ -30,6 +36,7 @@
 		} else {
 			self.power = NO;
 		}
+		self.nearest = NO;
 	}
 	return self;
 }

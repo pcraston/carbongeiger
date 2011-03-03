@@ -120,6 +120,7 @@ BOOL firstpoll = TRUE;
 	[responseString release];
 	
 	NSString *nearestPolluterName;
+	int nearestPolluterID;
 	
 	double nearestPolluterDistance = 42000000;
 	for (int i = 0; i < [installations count]; i++) {
@@ -131,9 +132,16 @@ BOOL firstpoll = TRUE;
 		[installationLocation release];
 		if (distance < nearestPolluterDistance) {
 			nearestPolluterName = [installation objectForKey:@"name"];
+			nearestPolluterID = [[installation objectForKey:@"id"] doubleValue];
 			nearestPolluterDistance = distance;
-		}
+		}		
+	}
+	for (int i = 0; i < [installations count]; i++) {
+		NSDictionary *installation = [installations objectAtIndex:i];
 		InstallationAnnotation *installationMarker = [[InstallationAnnotation alloc] initWithDictionary:installation];
+		if ([[installation objectForKey:@"id"] doubleValue] == nearestPolluterID) {
+			installationMarker.nearest = YES;			
+		}
 		[mapView addAnnotation:installationMarker];
 		[installationMarker release];
 		//NSLog(@"%@",installation);
@@ -146,27 +154,38 @@ BOOL firstpoll = TRUE;
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id )annotation
 {
 	MKAnnotationView *customAnnotationView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil] autorelease];
+	UIImage *pinImage;
 	if ([annotation overalloc] == YES) {
 		if ([annotation power] == YES) {
-			UIImage *pinImage = [UIImage imageNamed:@"icon_plant_red.png"];
-			[customAnnotationView setImage:pinImage];
-			[pinImage release];
+			if ([annotation nearest] == YES) {
+				pinImage = [UIImage imageNamed:@"icon_plant_red_closest.png"];				
+			} else {
+				pinImage = [UIImage imageNamed:@"icon_plant_red.png"];
+			}
 		} else {	
-			UIImage *pinImage = [UIImage imageNamed:@"icon_factory_red.png"];
-			[customAnnotationView setImage:pinImage];
-			[pinImage release];
+			if ([annotation nearest] == YES) {
+				pinImage = [UIImage imageNamed:@"icon_factory_red_closest.png"];				
+			} else {
+				pinImage = [UIImage imageNamed:@"icon_factory_red.png"];
+			}
 		}
 	} else {			
 		if ([annotation power] == YES) {
-			UIImage *pinImage = [UIImage imageNamed:@"icon_plant_green.png"];
-			[customAnnotationView setImage:pinImage];
-			[pinImage release];
+			if ([annotation nearest] == YES) {
+				pinImage = [UIImage imageNamed:@"icon_plant_green_closest.png"];				
+			} else {
+				pinImage = [UIImage imageNamed:@"icon_plant_green.png"];
+			}
 		} else {
-			UIImage *pinImage = [UIImage imageNamed:@"icon_factory_green.png"];
-			[customAnnotationView setImage:pinImage];
-			[pinImage release];
+			if ([annotation nearest] == YES) {
+				pinImage = [UIImage imageNamed:@"icon_factory_green_closest.png"];				
+			} else {
+				pinImage = [UIImage imageNamed:@"icon_factory_green.png"];
+			}
 		}
 	}	
+	[customAnnotationView setImage:pinImage];
+	[pinImage release];
 	customAnnotationView.canShowCallout = YES;
 	return customAnnotationView;
 }

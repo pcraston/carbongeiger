@@ -17,6 +17,7 @@
 	UIImage *image;
 	BOOL overalloc;
 	BOOL power;
+	BOOL nearest;
 }
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 @property (nonatomic, copy) NSString *title;
@@ -24,5 +25,6 @@
 @property (nonatomic, retain) UIImage *image;
 @property (nonatomic) BOOL overalloc;
 @property (nonatomic) BOOL power;
+@property (nonatomic) BOOL nearest;
 
 @end
