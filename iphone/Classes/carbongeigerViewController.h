@@ -13,16 +13,15 @@
 @interface carbongeigerViewController : UIViewController <MKMapViewDelegate, CLLocationManagerDelegate> {
 	CLLocationManager *locationManager;
 	MKMapView *mapView;
+	IBOutlet UILabel *nearestPolluterLabel;
 	IBOutlet UILabel *locationLabel;
 	IBOutlet UILabel *orientationLabel;	
 	NSMutableData *responseData;
-    NSMutableArray *mapAnnotations;
+	CLLocation *currentLocation;
 }
 
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
 @property (retain, nonatomic) CLLocationManager *locationManager;
-
-@property (nonatomic, retain) NSMutableArray *mapAnnotations;
 
 @end
 

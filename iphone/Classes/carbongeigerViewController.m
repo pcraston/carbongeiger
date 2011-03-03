@@ -8,11 +8,13 @@
 
 #import "carbongeigerViewController.h"
 #import "JSON.h"
-#import "InstallationAnnotation.h">
+#import "InstallationAnnotation.h"
 
 @implementation carbongeigerViewController
 
-@synthesize mapView, locationManager, mapAnnotations;
+@synthesize mapView, locationManager;
+
+BOOL firstpoll = TRUE;
 
 /*
 // The designated initializer. Override to perform setup that is required before the view is loaded.
@@ -38,9 +40,10 @@
 	locationManager.delegate = self; 
 	locationManager.desiredAccuracy = kCLLocationAccuracyBest; 
 	[locationManager startUpdatingLocation];
-	//currently deactivated because always on SF in simulator
-//	mapView.showsUserLocation=YES;
-	
+	//currently deactivated because always on SanFran in simulator
+	mapView.showsUserLocation=NO;
+	mapView.mapType = MKMapTypeStandard;
+	[mapView setDelegate:self];
 }
 
 
@@ -62,35 +65,39 @@
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
 	self.locationManager = nil;
-    self.mapAnnotations = nil;
     self.mapView = nil;
 	[super viewDidUnload];
 }
 
 
 - (void)dealloc {
+    [super dealloc];
 	[locationManager release];
 	[mapView release];
-    [mapAnnotations release];
-    [super dealloc];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
-    //zoom to current location
-	MKCoordinateRegion zoomRegion;
-    zoomRegion.center.latitude = newLocation.coordinate.latitude;
-    zoomRegion.center.longitude = newLocation.coordinate.longitude;
-    zoomRegion.span.latitudeDelta = 2;
-    zoomRegion.span.longitudeDelta = 2;	
-    [self.mapView setRegion:zoomRegion animated:YES];
-	
-	//poll sandbag server to get json file with nearby installations
-	NSString *latlon = [NSString stringWithFormat: @"Current Location: %f, %f",newLocation.coordinate.latitude,newLocation.coordinate.longitude];
-	locationLabel.text = latlon;
-	responseData = [[NSMutableData data] retain];
-	NSString *urltoload = [NSString stringWithFormat: @"http://www.sandbag.org.uk/maps/installations_geiger/%f_%f.json",newLocation.coordinate.latitude,newLocation.coordinate.longitude];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urltoload]];
-	[[NSURLConnection alloc] initWithRequest:request delegate:self];
+    if (firstpoll == TRUE || [newLocation distanceFromLocation:oldLocation] > 1000) {
+		firstpoll = FALSE;
+		//zoom to current location
+		MKCoordinateRegion zoomRegion;
+		zoomRegion.center.latitude = newLocation.coordinate.latitude;
+		zoomRegion.center.longitude = newLocation.coordinate.longitude;
+		zoomRegion.span.latitudeDelta = 0.05;
+		zoomRegion.span.longitudeDelta = 0.05;	
+		[self.mapView setRegion:zoomRegion animated:YES];
+
+		currentLocation = [[CLLocation alloc] initWithLatitude:newLocation.coordinate.latitude longitude:newLocation.coordinate.longitude];
+
+		//poll sandbag server to get json file with nearby installations
+		NSString *latlon = [NSString stringWithFormat: @"Current Location: %f, %f",currentLocation.coordinate.latitude,currentLocation.coordinate.longitude];
+		locationLabel.text = latlon;
+		responseData = [[NSMutableData data] retain];
+		NSString *urltoload = [NSString stringWithFormat: @"http://www.sandbag.org.uk/maps/installations_geiger/%f_%f.json",currentLocation.coordinate.latitude,currentLocation.coordinate.longitude];
+		NSLog(@"Calling %@",urltoload);
+		NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urltoload]];
+		[[NSURLConnection alloc] initWithRequest:request delegate:self];
+	}
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
@@ -102,24 +109,46 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-	//locationLabel.text = [NSString stringWithFormat:@"Connection failed: %@", [error description]];
+	NSLog(@"Connection failed: %@", [error description]);
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	[connection release];
 	NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 	[responseData release];
-	NSDictionary *installations = [responseString JSONValue];
+	NSArray *installations = [responseString JSONValue];
+	[responseString release];
 	
-	self.mapAnnotations = [[NSMutableArray alloc] initWithCapacity:[installations count]];
+	NSString *nearestPolluterName;
 	
+	double nearestPolluterDistance = 42000000;
 	for (int i = 0; i < [installations count]; i++) {
-		InstallationAnnotation *installation = [[InstallationAnnotation alloc] init];
-		[self.mapAnnotations addObject:[installations objectAtIndex:i]];
-		NSLog(@"%@",[mapAnnotations objectAtIndex:i]);
-		[installation release];
+		NSDictionary *installation = [installations objectAtIndex:i];
+		NSString *installationLat = [installation objectForKey:@"lat"];
+		NSString *installationLon = [installation objectForKey:@"lon"];
+		CLLocation *installationLocation = [[CLLocation alloc] initWithLatitude:[installationLat doubleValue] longitude:[installationLon doubleValue]];
+		double distance = [installationLocation distanceFromLocation:currentLocation];
+		[installationLocation release];
+		if (distance < nearestPolluterDistance) {
+			nearestPolluterName = [installation objectForKey:@"name"];
+			nearestPolluterDistance = distance;
+		}
+		InstallationAnnotation *installationMarker = [[InstallationAnnotation alloc] initWithDictionary:installation];
+		[mapView addAnnotation:installationMarker];
+		[installationMarker release];
 	}
-//		[text appendFormat:@"%@\n", [installations objectAtIndex:i]];
+	
+    NSString *nearestPolluterLabelText = [NSString stringWithFormat: @" %@ is %dm away!",nearestPolluterName,lroundf(nearestPolluterDistance)];
+    nearestPolluterLabel.text = [nearestPolluterLabel.text stringByAppendingString:nearestPolluterLabelText];
+}
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id )annotation
+{
+	MKAnnotationView *customAnnotationView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil] autorelease];
+	UIImage *pinImage = [UIImage imageNamed:@"icon_factory_green.png"];
+	[customAnnotationView setImage:pinImage];
+	customAnnotationView.canShowCallout = YES;
+	return customAnnotationView;
 }
 
 @end

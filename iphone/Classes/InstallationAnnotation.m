@@ -2,7 +2,7 @@
 //  InstallationAnnotation.m
 //  carbongeiger
 //
-//  Created by Patrick Craston on 28/02/2011.
+//  Created by Patrick Craston on 03/03/2011.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
@@ -10,34 +10,18 @@
 
 
 @implementation InstallationAnnotation
+@synthesize coordinate, title, subtitle;
 
-@synthesize image;
-@synthesize latitude;
-@synthesize longitude;
-
-- (CLLocationCoordinate2D)coordinate;
+- (id) initWithDictionary:(NSDictionary *) dict
 {
-    CLLocationCoordinate2D theCoordinate;
-    theCoordinate.latitude = 37.786996;
-    theCoordinate.longitude = -122.419281;
-    return theCoordinate; 
-}
-
-- (void)dealloc
-{
-    [image release];
-    [super dealloc];
-}
-
-- (NSString *)title
-{
-    return @"San Francisco";
-}
-
-// optional
-- (NSString *)subtitle
-{
-    return @"Founded: June 29, 1776";
+	self = [super init];
+	if (self != nil) {
+		coordinate.latitude = [[dict objectForKey:@"lat"] doubleValue];
+		coordinate.longitude = [[dict objectForKey:@"lon"] doubleValue];
+		self.title = [dict objectForKey:@"name"];
+		self.subtitle = [dict objectForKey:@"company"];
+	}
+	return self;
 }
 
 @end
