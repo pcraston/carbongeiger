@@ -14,9 +14,15 @@
 	CLLocationCoordinate2D coordinate;
 	NSString *title;
 	NSString *subtitle;
+	UIImage *image;
+	BOOL overalloc;
+	BOOL power;
 }
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;
+@property (nonatomic, retain) UIImage *image;
+@property (nonatomic) BOOL overalloc;
+@property (nonatomic) BOOL power;
 
 @end

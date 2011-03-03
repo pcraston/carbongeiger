@@ -136,6 +136,7 @@ BOOL firstpoll = TRUE;
 		InstallationAnnotation *installationMarker = [[InstallationAnnotation alloc] initWithDictionary:installation];
 		[mapView addAnnotation:installationMarker];
 		[installationMarker release];
+		//NSLog(@"%@",installation);
 	}
 	
     NSString *nearestPolluterLabelText = [NSString stringWithFormat: @" %@ is %dm away!",nearestPolluterName,lroundf(nearestPolluterDistance)];
@@ -145,8 +146,27 @@ BOOL firstpoll = TRUE;
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id )annotation
 {
 	MKAnnotationView *customAnnotationView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil] autorelease];
-	UIImage *pinImage = [UIImage imageNamed:@"icon_factory_green.png"];
-	[customAnnotationView setImage:pinImage];
+	if ([annotation overalloc] == YES) {
+		if ([annotation power] == YES) {
+			UIImage *pinImage = [UIImage imageNamed:@"icon_plant_red.png"];
+			[customAnnotationView setImage:pinImage];
+			[pinImage release];
+		} else {	
+			UIImage *pinImage = [UIImage imageNamed:@"icon_factory_red.png"];
+			[customAnnotationView setImage:pinImage];
+			[pinImage release];
+		}
+	} else {			
+		if ([annotation power] == YES) {
+			UIImage *pinImage = [UIImage imageNamed:@"icon_plant_green.png"];
+			[customAnnotationView setImage:pinImage];
+			[pinImage release];
+		} else {
+			UIImage *pinImage = [UIImage imageNamed:@"icon_factory_green.png"];
+			[customAnnotationView setImage:pinImage];
+			[pinImage release];
+		}
+	}	
 	customAnnotationView.canShowCallout = YES;
 	return customAnnotationView;
 }
