@@ -22,7 +22,7 @@
 		NSString *company = [dict objectForKey:@"company"];
 		NSString *parent_company = [dict objectForKey:@"parent_company"];
 		if ([parent_company isEqualToString:@""] || [parent_company isEqualToString: company]) {
-			self.subtitle = [NSString stringWithFormat:@"%@",company];	
+			self.subtitle = [NSString stringWithFormat:@"%@\n",company];	
 		} else {
 			self.subtitle = [NSString stringWithFormat:@"%@, %@",company,parent_company];	
 		}

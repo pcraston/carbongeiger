@@ -12,7 +12,7 @@
 
 @implementation carbongeigerViewController
 
-@synthesize mapView, locationManager;
+@synthesize mapView, locationManager, soundFileURLRef, soundFileObject;
 
 BOOL firstpoll = TRUE;
 
@@ -44,6 +44,27 @@ BOOL firstpoll = TRUE;
 	mapView.showsUserLocation=NO;
 	mapView.mapType = MKMapTypeStandard;
 	[mapView setDelegate:self];
+	
+	UIAccelerometer *accel = [UIAccelerometer sharedAccelerometer];
+	accel.delegate = self;
+	accel.updateInterval = 1.0f/60.0f;
+	
+	NSURL *geigerClick = [[NSBundle mainBundle] URLForResource: @"geigerclick" withExtension: @"wav"];
+	self.soundFileURLRef = (CFURLRef) [geigerClick retain];
+	AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
+	
+	motionManager = [[CMMotionManager alloc] init];
+	if (!motionManager.isDeviceMotionAvailable) {
+		//n/a for older than iphone 4, need to use magnetometer in that case!
+	}
+	motionManager.deviceMotionUpdateInterval = 0.01;
+	[motionManager startDeviceMotionUpdates];
+	
+	CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
+	//save the reference frame
+	CMAttitude *attitude = deviceMotion.attitude;
+	referenceAttitude = nil;
+	referenceAttitude = [attitude retain];
 }
 
 
@@ -71,13 +92,35 @@ BOOL firstpoll = TRUE;
 
 
 - (void)dealloc {
-    [super dealloc];
 	[locationManager release];
+	[motionManager stopDeviceMotionUpdates];
+	[motionManager release];
 	[mapView release];
+	AudioServicesDisposeSystemSoundID(soundFileObject);
+	CFRelease(soundFileURLRef);
+    [super dealloc];
+}
+
+//use accelerometer delegate to listen for changes in motion and update orientation and beep if required
+- (void) accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration {
+	// check that significant movement
+	if ((fabsf(acceleration.x) > 1.5 || fabsf(acceleration.y) > 1.5 || fabsf(acceleration.z) > 1.5) && nearestPolluterBearing && !firstpoll)  {
+		NSLog(@"%@", acceleration);
+		//get orientation/attitude of phone from DeviceMotion
+		CMAttitude *attitude = motionManager.deviceMotion.attitude;
+		[attitude multiplyByInverseOfAttitude: referenceAttitude];
+		float yaw = attitude.yaw * (180.0/M_PI);
+		float phonePolluterOrientation = nearestPolluterBearing - yaw;
+		phonePolluterOrientation = fabs(phonePolluterOrientation);
+		if (phonePolluterOrientation < 40 && nearestPolluterDistance < 5000) {
+			AudioServicesPlaySystemSound(soundFileObject);
+			AudioServicesPlaySystemSound (kSystemSoundID_Vibrate);
+		}
+	}
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
-    if (firstpoll == TRUE || [newLocation distanceFromLocation:oldLocation] > 1000) {
+    if (firstpoll == TRUE || [newLocation distanceFromLocation:oldLocation] > 1000) {		
 		firstpoll = FALSE;
 		//zoom to current location
 		MKCoordinateRegion zoomRegion;
@@ -122,7 +165,9 @@ BOOL firstpoll = TRUE;
 	NSString *nearestPolluterName;
 	int nearestPolluterID;
 	
-	double nearestPolluterDistance = 42000000;
+	nearestPolluterDistance = 42000000;
+	float nearestPolluterLat;
+	float nearestPolluterLon;
 	for (int i = 0; i < [installations count]; i++) {
 		NSDictionary *installation = [installations objectAtIndex:i];
 		NSString *installationLat = [installation objectForKey:@"lat"];
@@ -133,9 +178,28 @@ BOOL firstpoll = TRUE;
 		if (distance < nearestPolluterDistance) {
 			nearestPolluterName = [installation objectForKey:@"name"];
 			nearestPolluterID = [[installation objectForKey:@"id"] doubleValue];
-			nearestPolluterDistance = distance;
+			nearestPolluterDistance = distance;			
+			nearestPolluterLat = [[installation objectForKey:@"lat"] doubleValue];
+			nearestPolluterLon = [[installation objectForKey:@"lon"] doubleValue];
 		}		
 	}
+	//convert to radians
+	nearestPolluterLat = nearestPolluterLat * (M_PI/180.0);
+	nearestPolluterLon = nearestPolluterLon * (M_PI/180.0);
+	//get orientation between phone and nearest polluter
+	float currentLat = (currentLocation.coordinate.latitude / 180.0) * M_PI;
+	float currentLon = (currentLocation.coordinate.longitude / 180.0) * M_PI;
+	nearestPolluterBearing = atan2(sin(nearestPolluterLon-currentLon)*cos(nearestPolluterLat), 
+									cos(currentLat)*sin(nearestPolluterLat)-sin(currentLat)
+									*cos(nearestPolluterLat)*cos(nearestPolluterLon-currentLon));
+	//convert radians back to degrees
+	nearestPolluterBearing = nearestPolluterBearing * (180.0/M_PI);
+	//convert to 360 east of north
+	if (nearestPolluterBearing < 0) {
+		nearestPolluterBearing = 360 + nearestPolluterBearing;
+	}
+	NSLog(@"Closest polluter bearing: %f",nearestPolluterBearing);
+	
 	for (int i = 0; i < [installations count]; i++) {
 		NSDictionary *installation = [installations objectAtIndex:i];
 		InstallationAnnotation *installationMarker = [[InstallationAnnotation alloc] initWithDictionary:installation];
