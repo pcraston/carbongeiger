@@ -54,6 +54,7 @@ public class MapViewer extends MapActivity {
 	private Vibrator vibes;
 	private CheckBox soundButton;
 	private boolean sound = true;
+	private String current_year = "2009";
 	
     /** Called when the activity is first created. */
     @Override
@@ -249,8 +250,14 @@ public class MapViewer extends MapActivity {
 	 		
 	 		for(installations current : insts){
 	 			GeoPoint point = new GeoPoint((int) (current.lat * 1E6), (int) (current.lon * 1E6));
-	 			String snippet = "Emissions 2009: " + current.emissions2009 + "\n" + "Allocations 2009: " + current.alloc2009 + "\nTonnes of C02";
-		        OverlayItem overlayitem = new OverlayItem(point, current.company + ": " + current.name, snippet);
+	 			String company;
+	 			if (current.parent_company.length() == 0 || current.parent_company.equals(current.company)) {
+	 				company = current.company;
+	 			} else {
+	 				company = current.company + ", " + current.parent_company;
+	 			}
+	 			String snippet = company + "\n" + "Emissions "+current_year+": " + current.emissions_current_year + "\n" + "Allocations "+current_year+": " + current.alloc_current_year + "\nTonnes of C02";
+		        OverlayItem overlayitem = new OverlayItem(point, current.name, snippet);
 		        Drawable markericon;
 		        if (nearestPolluterId > 0 && current.id == nearestPolluterId) {
 		        	markericon = getMarkerIcon(current.power, current.overalloc, true);
@@ -315,8 +322,9 @@ public class MapViewer extends MapActivity {
 class installations {
 	public String name;
 	public String company;
-	public int emissions2009;
-	public int alloc2009;
+	public String parent_company;
+	public int emissions_current_year;
+	public int alloc_current_year;
 	public int id;
     public double lat;
     public double lon;
