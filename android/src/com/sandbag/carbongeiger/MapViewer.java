@@ -289,9 +289,9 @@ public class MapViewer extends MapActivity {
     			}
     		} else {
     			if (nearest) {
-    				return this.getResources().getDrawable(R.drawable.icon_plant_green_closest);      				
+    				return this.getResources().getDrawable(R.drawable.icon_plant_purple_closest);      				
     			} else {
-    				return this.getResources().getDrawable(R.drawable.icon_plant_green);  
+    				return this.getResources().getDrawable(R.drawable.icon_plant_purple);  
     			}
     		}
     	} else {
@@ -303,9 +303,9 @@ public class MapViewer extends MapActivity {
     			}
     		} else {
     			if (nearest) {
-        	    	return this.getResources().getDrawable(R.drawable.icon_factory_green_closest);     				
+        	    	return this.getResources().getDrawable(R.drawable.icon_factory_purple_closest);     				
     			} else {
-    				return this.getResources().getDrawable(R.drawable.icon_factory_green); 
+    				return this.getResources().getDrawable(R.drawable.icon_factory_purple); 
     			}
     		}
     	}
