@@ -236,15 +236,15 @@ BOOL firstpoll = TRUE;
 	} else {			
 		if ([annotation power] == YES) {
 			if ([annotation nearest] == YES) {
-				pinImage = [UIImage imageNamed:@"icon_plant_green_closest.png"];				
+				pinImage = [UIImage imageNamed:@"icon_plant_purple_closest.png"];				
 			} else {
-				pinImage = [UIImage imageNamed:@"icon_plant_green.png"];
+				pinImage = [UIImage imageNamed:@"icon_plant_purple.png"];
 			}
 		} else {
 			if ([annotation nearest] == YES) {
-				pinImage = [UIImage imageNamed:@"icon_factory_green_closest.png"];				
+				pinImage = [UIImage imageNamed:@"icon_factory_purple_closest.png"];				
 			} else {
-				pinImage = [UIImage imageNamed:@"icon_factory_green.png"];
+				pinImage = [UIImage imageNamed:@"icon_factory_purple.png"];
 			}
 		}
 	}	
