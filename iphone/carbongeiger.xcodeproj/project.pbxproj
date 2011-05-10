@@ -1,0 +1,422 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1D3623260D0F684500981E51 /* carbongeigerAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* carbongeigerAppDelegate.m */; };
+		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		2899E5220DE3E06400AC0155 /* carbongeigerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E5210DE3E06400AC0155 /* carbongeigerViewController.xib */; };
+		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
+		28D7ACF80DDB3853001CB0EB /* carbongeigerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* carbongeigerViewController.m */; };
+		4F0ECFE4131BCA4600479ED9 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0ECFE3131BCA4600479ED9 /* icon.png */; };
+		4F0F9BCE13099B3F008179BD /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F0F9BCD13099B3E008179BD /* MapKit.framework */; };
+		4F0F9C96130AE5C1008179BD /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F9C8D130AE5C0008179BD /* NSObject+SBJSON.m */; };
+		4F0F9C97130AE5C1008179BD /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F9C8F130AE5C0008179BD /* NSString+SBJSON.m */; };
+		4F0F9C98130AE5C1008179BD /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F9C91130AE5C1008179BD /* SBJsonBase.m */; };
+		4F0F9C99130AE5C1008179BD /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F9C93130AE5C1008179BD /* SBJsonParser.m */; };
+		4F0F9C9A130AE5C1008179BD /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F9C95130AE5C1008179BD /* SBJsonWriter.m */; };
+		4F24CE31135707AE00E68A91 /* icon_factory_purple_closest.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F24CE2D135707AE00E68A91 /* icon_factory_purple_closest.png */; };
+		4F24CE32135707AE00E68A91 /* icon_factory_purple.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F24CE2E135707AE00E68A91 /* icon_factory_purple.png */; };
+		4F24CE33135707AE00E68A91 /* icon_plant_purple_closest.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F24CE2F135707AE00E68A91 /* icon_plant_purple_closest.png */; };
+		4F24CE34135707AE00E68A91 /* icon_plant_purple.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F24CE30135707AE00E68A91 /* icon_plant_purple.png */; };
+		4F407BE0131BF5E5007126BF /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F407BDF131BF5E5007126BF /* CoreLocation.framework */; };
+		4F586B6A131FD77300D2C860 /* InstallationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F586B69131FD77300D2C860 /* InstallationAnnotation.m */; };
+		4F586BAB131FE63A00D2C860 /* icon_factory_green_closest.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F586BA3131FE63A00D2C860 /* icon_factory_green_closest.png */; };
+		4F586BAC131FE63A00D2C860 /* icon_factory_green.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F586BA4131FE63A00D2C860 /* icon_factory_green.png */; };
+		4F586BAD131FE63A00D2C860 /* icon_factory_red_closest.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F586BA5131FE63A00D2C860 /* icon_factory_red_closest.png */; };
+		4F586BAE131FE63A00D2C860 /* icon_factory_red.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F586BA6131FE63A00D2C860 /* icon_factory_red.png */; };
+		4F586BAF131FE63A00D2C860 /* icon_plant_green_closest.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F586BA7131FE63A00D2C860 /* icon_plant_green_closest.png */; };
+		4F586BB0131FE63A00D2C860 /* icon_plant_green.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F586BA8131FE63A00D2C860 /* icon_plant_green.png */; };
+		4F586BB1131FE63A00D2C860 /* icon_plant_red_closest.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F586BA9131FE63A00D2C860 /* icon_plant_red_closest.png */; };
+		4F586BB2131FE63A00D2C860 /* icon_plant_red.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F586BAA131FE63A00D2C860 /* icon_plant_red.png */; };
+		4FE33A801326519D00C23456 /* geigerclick.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4FE33A7F1326519D00C23456 /* geigerclick.wav */; };
+		4FE33AA7132662CC00C23456 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FE33AA6132662CC00C23456 /* AudioToolbox.framework */; };
+		4FE33AE21326850F00C23456 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FE33AE11326850F00C23456 /* CoreMotion.framework */; };
+		4FF108341368480400C7342C /* icon_retina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FF108331368480400C7342C /* icon_retina.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1D3623240D0F684500981E51 /* carbongeigerAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = carbongeigerAppDelegate.h; sourceTree = "<group>"; };
+		1D3623250D0F684500981E51 /* carbongeigerAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = carbongeigerAppDelegate.m; sourceTree = "<group>"; };
+		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		2899E5210DE3E06400AC0155 /* carbongeigerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = carbongeigerViewController.xib; sourceTree = "<group>"; };
+		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
+		28D7ACF60DDB3853001CB0EB /* carbongeigerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = carbongeigerViewController.h; sourceTree = "<group>"; };
+		28D7ACF70DDB3853001CB0EB /* carbongeigerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = carbongeigerViewController.m; sourceTree = "<group>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		32CA4F630368D1EE00C91783 /* carbongeiger_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = carbongeiger_Prefix.pch; sourceTree = "<group>"; };
+		4F0ECFE3131BCA4600479ED9 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		4F0F9BCD13099B3E008179BD /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		4F0F9C8B130AE5C0008179BD /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
+		4F0F9C8C130AE5C0008179BD /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
+		4F0F9C8D130AE5C0008179BD /* NSObject+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJSON.m"; sourceTree = "<group>"; };
+		4F0F9C8E130AE5C0008179BD /* NSString+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+SBJSON.h"; sourceTree = "<group>"; };
+		4F0F9C8F130AE5C0008179BD /* NSString+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+SBJSON.m"; sourceTree = "<group>"; };
+		4F0F9C90130AE5C0008179BD /* SBJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonBase.h; sourceTree = "<group>"; };
+		4F0F9C91130AE5C1008179BD /* SBJsonBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonBase.m; sourceTree = "<group>"; };
+		4F0F9C92130AE5C1008179BD /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
+		4F0F9C93130AE5C1008179BD /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
+		4F0F9C94130AE5C1008179BD /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
+		4F0F9C95130AE5C1008179BD /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		4F24CE2D135707AE00E68A91 /* icon_factory_purple_closest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_factory_purple_closest.png; sourceTree = "<group>"; };
+		4F24CE2E135707AE00E68A91 /* icon_factory_purple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_factory_purple.png; sourceTree = "<group>"; };
+		4F24CE2F135707AE00E68A91 /* icon_plant_purple_closest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_plant_purple_closest.png; sourceTree = "<group>"; };
+		4F24CE30135707AE00E68A91 /* icon_plant_purple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_plant_purple.png; sourceTree = "<group>"; };
+		4F407BBD131BE69A007126BF /* carbongeiger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = carbongeiger.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F407BDF131BF5E5007126BF /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		4F586B68131FD77300D2C860 /* InstallationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstallationAnnotation.h; sourceTree = "<group>"; };
+		4F586B69131FD77300D2C860 /* InstallationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstallationAnnotation.m; sourceTree = "<group>"; };
+		4F586BA3131FE63A00D2C860 /* icon_factory_green_closest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_factory_green_closest.png; sourceTree = "<group>"; };
+		4F586BA4131FE63A00D2C860 /* icon_factory_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_factory_green.png; sourceTree = "<group>"; };
+		4F586BA5131FE63A00D2C860 /* icon_factory_red_closest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_factory_red_closest.png; sourceTree = "<group>"; };
+		4F586BA6131FE63A00D2C860 /* icon_factory_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_factory_red.png; sourceTree = "<group>"; };
+		4F586BA7131FE63A00D2C860 /* icon_plant_green_closest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_plant_green_closest.png; sourceTree = "<group>"; };
+		4F586BA8131FE63A00D2C860 /* icon_plant_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_plant_green.png; sourceTree = "<group>"; };
+		4F586BA9131FE63A00D2C860 /* icon_plant_red_closest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_plant_red_closest.png; sourceTree = "<group>"; };
+		4F586BAA131FE63A00D2C860 /* icon_plant_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_plant_red.png; sourceTree = "<group>"; };
+		4FE33A7F1326519D00C23456 /* geigerclick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = geigerclick.wav; sourceTree = "<group>"; };
+		4FE33AA6132662CC00C23456 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		4FE33AE11326850F00C23456 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		4FF108331368480400C7342C /* icon_retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_retina.png; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* carbongeiger-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "carbongeiger-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D60588F0D05DD3D006BFB54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
+				4F0F9BCE13099B3F008179BD /* MapKit.framework in Frameworks */,
+				4F407BE0131BF5E5007126BF /* CoreLocation.framework in Frameworks */,
+				4FE33AA7132662CC00C23456 /* AudioToolbox.framework in Frameworks */,
+				4FE33AE21326850F00C23456 /* CoreMotion.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				4F0F9C8B130AE5C0008179BD /* JSON.h */,
+				4F0F9C8C130AE5C0008179BD /* NSObject+SBJSON.h */,
+				4F0F9C8D130AE5C0008179BD /* NSObject+SBJSON.m */,
+				4F0F9C8E130AE5C0008179BD /* NSString+SBJSON.h */,
+				4F0F9C8F130AE5C0008179BD /* NSString+SBJSON.m */,
+				4F0F9C90130AE5C0008179BD /* SBJsonBase.h */,
+				4F0F9C91130AE5C1008179BD /* SBJsonBase.m */,
+				4F0F9C92130AE5C1008179BD /* SBJsonParser.h */,
+				4F0F9C93130AE5C1008179BD /* SBJsonParser.m */,
+				4F0F9C94130AE5C1008179BD /* SBJsonWriter.h */,
+				4F0F9C95130AE5C1008179BD /* SBJsonWriter.m */,
+				1D3623240D0F684500981E51 /* carbongeigerAppDelegate.h */,
+				1D3623250D0F684500981E51 /* carbongeigerAppDelegate.m */,
+				28D7ACF60DDB3853001CB0EB /* carbongeigerViewController.h */,
+				28D7ACF70DDB3853001CB0EB /* carbongeigerViewController.m */,
+				4F586B68131FD77300D2C860 /* InstallationAnnotation.h */,
+				4F586B69131FD77300D2C860 /* InstallationAnnotation.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4F407BBD131BE69A007126BF /* carbongeiger.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32CA4F630368D1EE00C91783 /* carbongeiger_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4FF108331368480400C7342C /* icon_retina.png */,
+				4F24CE2D135707AE00E68A91 /* icon_factory_purple_closest.png */,
+				4F24CE2E135707AE00E68A91 /* icon_factory_purple.png */,
+				4F24CE2F135707AE00E68A91 /* icon_plant_purple_closest.png */,
+				4F24CE30135707AE00E68A91 /* icon_plant_purple.png */,
+				4FE33A96132660B300C23456 /* sounds */,
+				4F586BA3131FE63A00D2C860 /* icon_factory_green_closest.png */,
+				4F586BA4131FE63A00D2C860 /* icon_factory_green.png */,
+				4F586BA5131FE63A00D2C860 /* icon_factory_red_closest.png */,
+				4F586BA6131FE63A00D2C860 /* icon_factory_red.png */,
+				4F586BA7131FE63A00D2C860 /* icon_plant_green_closest.png */,
+				4F586BA8131FE63A00D2C860 /* icon_plant_green.png */,
+				4F586BA9131FE63A00D2C860 /* icon_plant_red_closest.png */,
+				4F586BAA131FE63A00D2C860 /* icon_plant_red.png */,
+				4F0ECFE3131BCA4600479ED9 /* icon.png */,
+				2899E5210DE3E06400AC0155 /* carbongeigerViewController.xib */,
+				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
+				8D1107310486CEB800E47090 /* carbongeiger-Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
+				4F0F9BCD13099B3E008179BD /* MapKit.framework */,
+				4F407BDF131BF5E5007126BF /* CoreLocation.framework */,
+				4FE33AA6132662CC00C23456 /* AudioToolbox.framework */,
+				4FE33AE11326850F00C23456 /* CoreMotion.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4FE33A96132660B300C23456 /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				4FE33A7F1326519D00C23456 /* geigerclick.wav */,
+			);
+			name = sounds;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D6058900D05DD3D006BFB54 /* carbongeiger */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "carbongeiger" */;
+			buildPhases = (
+				1D60588D0D05DD3D006BFB54 /* Resources */,
+				1D60588E0D05DD3D006BFB54 /* Sources */,
+				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = carbongeiger;
+			productName = iGeiger;
+			productReference = 4F407BBD131BE69A007126BF /* carbongeiger.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "carbongeiger" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D6058900D05DD3D006BFB54 /* carbongeiger */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1D60588D0D05DD3D006BFB54 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
+				2899E5220DE3E06400AC0155 /* carbongeigerViewController.xib in Resources */,
+				4F0ECFE4131BCA4600479ED9 /* icon.png in Resources */,
+				4F586BAB131FE63A00D2C860 /* icon_factory_green_closest.png in Resources */,
+				4F586BAC131FE63A00D2C860 /* icon_factory_green.png in Resources */,
+				4F586BAD131FE63A00D2C860 /* icon_factory_red_closest.png in Resources */,
+				4F586BAE131FE63A00D2C860 /* icon_factory_red.png in Resources */,
+				4F586BAF131FE63A00D2C860 /* icon_plant_green_closest.png in Resources */,
+				4F586BB0131FE63A00D2C860 /* icon_plant_green.png in Resources */,
+				4F586BB1131FE63A00D2C860 /* icon_plant_red_closest.png in Resources */,
+				4F586BB2131FE63A00D2C860 /* icon_plant_red.png in Resources */,
+				4FE33A801326519D00C23456 /* geigerclick.wav in Resources */,
+				4F24CE31135707AE00E68A91 /* icon_factory_purple_closest.png in Resources */,
+				4F24CE32135707AE00E68A91 /* icon_factory_purple.png in Resources */,
+				4F24CE33135707AE00E68A91 /* icon_plant_purple_closest.png in Resources */,
+				4F24CE34135707AE00E68A91 /* icon_plant_purple.png in Resources */,
+				4FF108341368480400C7342C /* icon_retina.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D60588E0D05DD3D006BFB54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
+				1D3623260D0F684500981E51 /* carbongeigerAppDelegate.m in Sources */,
+				28D7ACF80DDB3853001CB0EB /* carbongeigerViewController.m in Sources */,
+				4F0F9C96130AE5C1008179BD /* NSObject+SBJSON.m in Sources */,
+				4F0F9C97130AE5C1008179BD /* NSString+SBJSON.m in Sources */,
+				4F0F9C98130AE5C1008179BD /* SBJsonBase.m in Sources */,
+				4F0F9C99130AE5C1008179BD /* SBJsonParser.m in Sources */,
+				4F0F9C9A130AE5C1008179BD /* SBJsonWriter.m in Sources */,
+				4F586B6A131FD77300D2C860 /* InstallationAnnotation.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1D6058940D05DD3E006BFB54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = carbongeiger_Prefix.pch;
+				INFOPLIST_FILE = "carbongeiger-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				PRODUCT_NAME = carbongeiger;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Debug;
+		};
+		1D6058950D05DD3E006BFB54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = carbongeiger_Prefix.pch;
+				INFOPLIST_FILE = "carbongeiger-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				PRODUCT_NAME = carbongeiger;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4FC8D0D713744A75009ADA3F /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PREBINDING = NO;
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+			};
+			name = Distribution;
+		};
+		4FC8D0D813744A75009ADA3F /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = carbongeiger_Prefix.pch;
+				INFOPLIST_FILE = "carbongeiger-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				PRODUCT_NAME = carbongeiger;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Distribution;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				PREBINDING = NO;
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PREBINDING = NO;
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "carbongeiger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D6058940D05DD3E006BFB54 /* Debug */,
+				1D6058950D05DD3E006BFB54 /* Release */,
+				4FC8D0D813744A75009ADA3F /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "carbongeiger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+				4FC8D0D713744A75009ADA3F /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
