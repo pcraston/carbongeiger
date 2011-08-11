@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.hardware.GeomagneticField;
@@ -18,9 +19,8 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.CheckBox;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
@@ -52,9 +52,8 @@ public class MapViewer extends MapActivity {
 	private float distance = 42000000;
 	private MediaPlayer mp;
 	private Vibrator vibes;
-	private CheckBox soundButton;
 	private boolean sound = true;
-	private String current_year = "2009";
+	private String current_year = "2010";
 	
     /** Called when the activity is first created. */
     @Override
@@ -67,10 +66,6 @@ public class MapViewer extends MapActivity {
     	mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
         vibes = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-        
-        soundButton = (CheckBox)findViewById(R.id.chksound);
-        soundButton.setOnClickListener(soundButtonListener);
-    	soundButton.setChecked(true);
     }
     
     /** Called when the activity is first returned to front. */
@@ -78,6 +73,7 @@ public class MapViewer extends MapActivity {
     public void onResume()
     {
         super.onResume();
+        showPopup();
     	startGettingLocation();	
     	mSensorManager.registerListener(mListener, mSensor, SensorManager.SENSOR_DELAY_GAME);
     }
@@ -104,6 +100,54 @@ public class MapViewer extends MapActivity {
 //    	stopGettingLocation();
 //    }
     
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		MenuItem info = menu.add(0,0,0,"Information");
+		info.setIcon(android.R.drawable.ic_menu_info_details);
+		
+		MenuItem sound = menu.add(0,1,1,"Turn Sound Off");
+		sound.setIcon(android.R.drawable.ic_lock_silent_mode);
+	
+	    return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case 0:
+			showPopup();
+		    return true;		
+		case 1:
+			if (sound == true) {
+				sound = false;
+				item.setIcon(android.R.drawable.ic_lock_silent_mode_off);
+				item.setTitle("Turn Sound On");
+			} else {
+				sound = true;
+				item.setIcon(android.R.drawable.ic_lock_silent_mode);
+				item.setTitle("Turn Sound Off");				
+			}
+		    return true;		
+		default:
+			return super.onOptionsItemSelected(item);
+    }
+
+	}
+    
+    public void showPopup() {    	
+        AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+        alertbox.setTitle("Welcome to Sandbag's Carbon Geiger");
+        TextView myView = new TextView(getApplicationContext());
+        myView.setText("instructions here..\n\nQuestions, Comments?\ninfo@sandbag.org.uk");
+        myView.setTextSize(15);
+        myView.setPadding(15, 0, 15, 10);
+        alertbox.setView(myView);
+        alertbox.setIcon(R.drawable.sally);
+        alertbox.setNeutralButton("Continue", null);
+        alertbox.show();
+    }
+    
     public void initMap() {
         setContentView(R.layout.main);
     	mapView = (MapView) findViewById(R.id.mapview);
@@ -112,18 +156,6 @@ public class MapViewer extends MapActivity {
 		mapView.setBuiltInZoomControls(true);
 		myLocationOverlay = new MyLocationOverlay(this, mapView);
     }
-    
-    private OnClickListener soundButtonListener = new OnClickListener() {
-        public void onClick(View v) {
-        	if (soundButton.isChecked()) {
-            	sound = true;
-            	soundButton.setChecked(true);
-        	} else {
-        		sound = false;
-        		soundButton.setChecked(false);
-        	}
-        }
-    };
     
     private final SensorEventListener mListener = new SensorEventListener() {
         public void onSensorChanged(SensorEvent event) {
@@ -149,7 +181,7 @@ public class MapViewer extends MapActivity {
 				difference = orientation - (event.values[0] + declination);
 				difference = Math.abs(difference);
 //				Log.d("carbongeiger","Difference between this and phone orientation: " + difference);
-				((TextView) findViewById(R.id.orientation)).setText("Orientation. Phone: " + Math.round(event.values[0]) + ", Me->Polluter: " + Math.round(orientation) + ", Phone->Polluter: " + Math.round(difference));
+//				((TextView) findViewById(R.id.orientation)).setText("Orientation. Phone: " + Math.round(event.values[0]) + ", Me->Polluter: " + Math.round(orientation) + ", Phone->Polluter: " + Math.round(difference));
 	    		if (difference < 40 && distance < 5000) {
 //					((TextView) findViewById(R.id.orientation)).setText("Now pointing at nearest polluter");
 	    			vibes.vibrate(25);

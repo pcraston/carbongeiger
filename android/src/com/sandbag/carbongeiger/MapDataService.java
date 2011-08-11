@@ -27,7 +27,7 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
-import android.util.Log;
+//import android.util.Log;
 
 public class MapDataService{
 
