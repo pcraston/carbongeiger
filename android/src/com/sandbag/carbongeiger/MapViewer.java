@@ -139,7 +139,11 @@ public class MapViewer extends MapActivity {
         AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
         alertbox.setTitle("Welcome to Sandbag's Carbon Geiger");
         TextView myView = new TextView(getApplicationContext());
-        myView.setText("instructions here..\n\nQuestions, Comments?\ninfo@sandbag.org.uk");
+        myView.setText("The nearest large source of CO2 pollution to you is " +
+        		"highlighted with an 'x' on our map. Move your phone around " +
+        		"and (if you are close enough) a vibrating beep will point " +
+        		"you in the right direction.\n\nQuestions? Comments?\nWant " +
+        		"to get involved?\nEmail us at info@sandbag.org.uk");
         myView.setTextSize(15);
         myView.setPadding(15, 0, 15, 10);
         alertbox.setView(myView);
