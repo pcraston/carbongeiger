@@ -65,7 +65,7 @@ BOOL firstpoll = TRUE;
 	referenceAttitude = nil;
 	referenceAttitude = [attitude retain];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome to Sandbag's Carbon Geiger" message:@"bla bla bla\n\nComments? Questions?\ninfo@sandbag.org.uk" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome to Sandbag's Carbon Geiger" message:@"The nearest large source of CO2 pollution to you is highlighted with an 'x' on our map. Move your phone around and (if you are close enough) a vibrating beep will point you in the right direction.\n\nQuestions? Comments?\nWant to get involved?\nEmail us at info@sandbag.org.uk" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
     [alert show];
     [alert release];
 
