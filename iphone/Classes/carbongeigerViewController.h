@@ -20,8 +20,8 @@
 	CMAttitude *referenceAttitude;
 	MKMapView *mapView;
 	IBOutlet UILabel *nearestPolluterLabel;
-	IBOutlet UILabel *locationLabel;
-	IBOutlet UILabel *orientationLabel;	
+//	IBOutlet UILabel *locationLabel;
+//	IBOutlet UILabel *orientationLabel;	
 	NSMutableData *responseData;
 	CLLocation *currentLocation;
 	CFURLRef soundFileURLRef;

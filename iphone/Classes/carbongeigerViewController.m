@@ -64,6 +64,11 @@ BOOL firstpoll = TRUE;
 	CMAttitude *attitude = deviceMotion.attitude;
 	referenceAttitude = nil;
 	referenceAttitude = [attitude retain];
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome to Sandbag's Carbon Geiger" message:@"bla bla bla\n\nComments? Questions?\ninfo@sandbag.org.uk" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+    [alert show];
+    [alert release];
+
 }
 
 
@@ -110,8 +115,8 @@ BOOL firstpoll = TRUE;
 		float yaw = attitude.yaw * (180.0/M_PI);
 		float phonePolluterOrientation = nearestPolluterBearing - yaw;
 		phonePolluterOrientation = fabs(phonePolluterOrientation);
-        NSString *orientation = [NSString stringWithFormat: @"Phone-Polluter: %d",lroundf(phonePolluterOrientation)];
-        orientationLabel.text = orientation;
+        //NSString *orientation = [NSString stringWithFormat: @"Phone-Polluter: %d",lroundf(phonePolluterOrientation)];
+        //orientationLabel.text = orientation;
 		if ((phonePolluterOrientation < 40.0 || phonePolluterOrientation > 320.0) && nearestPolluterDistance < 5000.0) {
 			AudioServicesPlaySystemSound(soundFileObject);
 			AudioServicesPlaySystemSound (kSystemSoundID_Vibrate);
@@ -133,8 +138,8 @@ BOOL firstpoll = TRUE;
 		currentLocation = [[CLLocation alloc] initWithLatitude:newLocation.coordinate.latitude longitude:newLocation.coordinate.longitude];
 
 		//poll sandbag server to get json file with nearby installations
-		NSString *latlon = [NSString stringWithFormat: @"Current Location: %f, %f",currentLocation.coordinate.latitude,currentLocation.coordinate.longitude];
-		locationLabel.text = latlon;
+		//NSString *latlon = [NSString stringWithFormat: @"Current Location: %f, %f",currentLocation.coordinate.latitude,currentLocation.coordinate.longitude];
+		//locationLabel.text = latlon;
 		responseData = [[NSMutableData data] retain];
 		NSString *urltoload = [NSString stringWithFormat: @"http://www.sandbag.org.uk/maps/installations_geiger/%f_%f.json",currentLocation.coordinate.latitude,currentLocation.coordinate.longitude];
 		NSLog(@"Calling %@",urltoload);
